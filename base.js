@@ -1,11 +1,11 @@
 
-import CSS from './css.js'
+// import CSS from './css.js'
 
 // const ROUND = {}// stroke_linecap: "round", stroke_linejoin: "round", }
 const WIDTH = 10
 export function node(name, attributes = {}, children = []) {
 	// console.log('svg node', attributes, children)
-	let attr = Object.entries(attributes).map(x => `${x[0].replace('_', '-')}="${x[1]}"`).join(' ')
+	let attr = Object.entries(attributes).filter(x => x[1] !== undefined).map(x => `${x[0].replace('_', '-')}="${x[1]}"`).join(' ')
 	return `<${name} ${attr}`
 		+ (children.length
 			? `>${children.join('')}</${name}>`
@@ -15,11 +15,11 @@ export function node(name, attributes = {}, children = []) {
 export function style(css) { return `<style>${css}</style>` }
 export function frame({ width = 100, height = 100, inline = false, ...x } = {}, children = []) {
 	// console.log('svg frame', dim, children)
-	children.unshift(style(CSS))
+	// children.unshift(style(CSS))
 	return node('svg', {
 		viewbox: '0 0 ' + width + ' ' + height,
-		width: inline ? '' : width + 'px',
-		height: inline ? '' : height + 'px',
+		width: inline ? undefined : width + 'px',
+		height: inline ? undefined : height + 'px',
 		xmlns: "http://www.w3.org/2000/svg",
 		version: "1.1",
 	}, children)
@@ -45,8 +45,8 @@ export function rect(p1, p2, { ...x } = {}) {
 	})
 }
 
-export function line(p1, p2, x = {}) {
-	console.log('line', x)
+export function line(p1, p2, x = {}, children = []) {
+	// console.log('line', x)
 	return node('line', {
 		x1: p1.x, y1: p1.y,
 		x2: p2.x, y2: p2.y,
@@ -54,7 +54,7 @@ export function line(p1, p2, x = {}) {
 		stroke: x.color ?? '',
 		...dotted(x),
 		...x
-	})
+	}, children)
 }
 export function lines(points = [], x = {}) {
 	// console.log('points', points.slice(1).map((p, i) => [p, i]))
