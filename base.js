@@ -34,6 +34,11 @@ function dotted(x) {
 	if (!x.dotted) return {}
 	return { stroke_dasharray: '0 ' + ((x.width ?? WIDTH) * 2) }
 }
+function dashed(x) {
+	if (!x.dashed) return {}
+	let w = x.width ?? WIDTH
+	return { stroke_dasharray: (w * 2) + ' ' + (w * 4) }
+}
 
 export function rect(p1, p2, { ...x } = {}) {
 	return node('rect', {
@@ -53,6 +58,7 @@ export function line(p1, p2, x = {}, children = []) {
 		stroke_width: x.width ?? WIDTH,
 		stroke: x.color ?? '',
 		...dotted(x),
+		...dashed(x),
 		...x
 	}, children)
 }
